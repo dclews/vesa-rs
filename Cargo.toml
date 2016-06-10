@@ -8,6 +8,3 @@ crate-type = ["rlib"]
 name = "vesa"
 path = "src/lib.rs"
 
-[dependencies]
-rust-libcore = "*"
-
