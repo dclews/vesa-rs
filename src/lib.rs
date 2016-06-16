@@ -74,3 +74,28 @@ pub struct vbe_mode_info {
     pub linear_reserved_field_pos: u8,
     pub max_pixel_clock: u32,
 }
+
+pub struct VbeModeInfo<'a> {
+    mode_info: &'a vbe_mode_info,
+}
+impl<'a> VbeModeInfo<'a> {
+    pub fn new(mode_info: &'a vbe_mode_info) -> VbeModeInfo<'a> {
+        VbeModeInfo{mode_info: mode_info}
+    }
+    pub fn memory_model(&self) -> VbeMemoryModel {
+        match self.mode_info.mem_model {
+            0x0 => VbeMemoryModel::Text,
+            0x1 => VbeMemoryModel::Cga,
+            0x2 => VbeMemoryModel::Hercules,
+            0x3 => VbeMemoryModel::Planar,
+            0x4 => VbeMemoryModel::PackedPixel,
+            0x5 => VbeMemoryModel::NonChain4K,
+            0x6 => VbeMemoryModel::PackedPixel,
+            0x7 => VbeMemoryModel::YUV,
+            _ => VbeMemoryModel::Text, 
+        }
+    }
+    pub fn dimensions(&self) -> (usize, usize) {
+        (self.mode_info.x_res as usize, self.mode_info.y_res as usize)
+    }
+}
